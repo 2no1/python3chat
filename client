@@ -1,0 +1,45 @@
+import socket
+from time import sleep
+from getpass import getpass
+
+host = 'HOST'
+port = 5000
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect((host, port))
+
+loop = True
+while loop:
+	try:
+		s.settimeout(4)
+		text = input('Type: ')
+		data = text.encode('UTF-8')
+		if text == 'quitS':
+			passwd = False
+			pcount = 0
+			while not passwd:
+				pcount += 1
+				pwd = getpass()
+				if pwd == '1234':
+					s.send(data)
+					passwd = True
+				elif pcount == 3:
+					print ('HHell no, go away')
+					break
+		elif text == 'q':
+			s.close()
+			break
+		elif text == '':
+			print('Inavalid, entry not allowed.')
+		else:
+			s.send(data)
+			data, addr = s.recvfrom(1024)
+			print (str(addr) + ': ' + str(data))
+	except (socket.timeout, ConnectionResetError):
+		loop = False
+		sleep(2)
+		print('Server is dead, will close in...')
+		for i in reversed(range(4)):
+			sleep(1)
+			print (i)
+			
