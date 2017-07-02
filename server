@@ -17,7 +17,7 @@ while not quitS:
 		print('server will close in...')
 		for i in reversed(range(4)):
 			sleep(1)
-			print (i)
+			print (i, end='\r')
 		quitS = True
 		break
 	print (str(addr) + ': '+str(data))
